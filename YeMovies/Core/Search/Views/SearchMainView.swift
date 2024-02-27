@@ -1,6 +1,6 @@
 //
 //  HomeMain.swift
-//  SmartWaste
+//  YeMovies
 //
 //  Created by Yegor Myropoltsev on 27.11.2023.
 //

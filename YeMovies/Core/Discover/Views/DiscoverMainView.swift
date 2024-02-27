@@ -14,10 +14,13 @@ struct DiscoverMainView: View {
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack {}
-                .onAppear {
-                    viewStore.send(.viewDidAppear)
-                }
+            VStack {
+                MoviePosterCarousel("Popular", with: viewStore.movies)
+                Spacer()
+            }
+            .onAppear {
+                viewStore.send(.viewDidAppear)
+            }
         }
     }
 }
@@ -35,22 +38,46 @@ struct SDiscoverMainView_Previews: PreviewProvider {
 
 @Reducer
 struct DiscoverMain: Reducer {
+    @Dependency(\.movieCleint) var movieClient
     
     struct State: Equatable {
         var viewDidAppear = false
+        var movies: [Movie] = []
     }
     
     enum Action: Equatable {
         case viewDidAppear
+        case fetchMovies
+        case fetchMoviesSuccess([Movie])
         
     }
     
     var body: some Reducer<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
-            default :
+            case .viewDidAppear:
+                state.viewDidAppear = true
+                return .send(.fetchMovies)
+            case .fetchMovies:
+                return .run { send in
+                    do {
+                        let movies = try await fetchMovies()
+                        await send(.fetchMoviesSuccess(movies))
+                    } catch {
+                        print(error)
+                    }
+                }
+            case .fetchMoviesSuccess(let movies):
+                state.movies = movies
                 return .none
             }
         }
+    }
+}
+
+extension DiscoverMain {
+    func fetchMovies() async throws -> [Movie] {
+        let response = try await movieClient.fetchMovies(type: .popular)
+        return response.results
     }
 }

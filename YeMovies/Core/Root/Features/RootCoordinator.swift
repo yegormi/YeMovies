@@ -1,6 +1,6 @@
 //
 //  RootCoordinator.swift
-//  SmartWaste
+//  YeMovies
 //
 //  Created by Yegor Myropoltsev on 24.11.2023.
 //
@@ -28,7 +28,7 @@ struct RootCoordinator: Reducer {
             switch action {
             case .routeAction(_, action: .splash(.tabs)):
                 state.routes.removeAll()
-                state.routes.push(.tabs(.initState(from: .map)))
+                state.routes.push(.tabs(.initState(from: .discover)))
             default:
                 break
             }

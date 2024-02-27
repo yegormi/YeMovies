@@ -1,6 +1,6 @@
 //
 //  RootScreen.swift
-//  SmartWaste
+//  YeMovies
 //
 //  Created by Yegor Myropoltsev on 07.11.2023.
 //

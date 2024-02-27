@@ -1,6 +1,6 @@
 //
 //  SplashFeature.swift
-//  SmartWaste
+//  YeMovies
 //
 //  Created by Yegor Myropoltsev on 24.11.2023.
 //
@@ -11,15 +11,10 @@ import ComposableArchitecture
 
 @Reducer
 struct SplashFeature: Reducer {
-    @Dependency(\.keychainClient) var keychainClient
-
-    struct State: Equatable {
-        static let initialState = Self()
-    }
+    struct State: Equatable {}
 
     enum Action: Equatable {
         case appDidLaunch
-        case auth
         case tabs
     }
 
@@ -27,12 +22,7 @@ struct SplashFeature: Reducer {
         Reduce { _, action in
             switch action {
             case .appDidLaunch:
-                guard let _ = keychainClient.retrieveToken() else {
-                    return .send(.auth)
-                }
                 return .send(.tabs)
-            case .auth:
-                return .none
             case .tabs:
                 return .none
             }

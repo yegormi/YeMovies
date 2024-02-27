@@ -11,7 +11,6 @@ struct MovieResponse: Decodable {
     let results: [Movie]
 }
 
-
 struct Movie: Decodable, Identifiable, Hashable {
     static func == (lhs: Movie, rhs: Movie) -> Bool {
         lhs.id == rhs.id
@@ -48,6 +47,12 @@ struct Movie: Decodable, Identifiable, Hashable {
         return formatter
     }()
     
+    static private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd, yyyy"
+        return formatter
+    }()
+    
     var backdropURL: URL {
         return URL(string: "https://image.tmdb.org/t/p/w500\(backdropPath ?? "")")!
     }
@@ -57,7 +62,7 @@ struct Movie: Decodable, Identifiable, Hashable {
     }
     
     var genreText: String {
-        genres?.first?.name ?? "n/a"
+        genres?.first?.name ?? "N/A"
     }
     
     var ratingText: String {
@@ -70,23 +75,30 @@ struct Movie: Decodable, Identifiable, Hashable {
     
     var scoreText: String {
         guard ratingText.count > 0 else {
-            return "n/a"
+            return "N/A"
         }
         return "\(ratingText.count)/10"
     }
     
     var yearText: String {
         guard let releaseDate = self.releaseDate, let date = Utils.dateFormatter.date(from: releaseDate) else {
-            return "n/a"
+            return "N/A"
         }
         return Movie.yearFormatter.string(from: date)
     }
     
     var durationText: String {
         guard let runtime = self.runtime, runtime > 0 else {
-            return "n/a"
+            return "N/A"
         }
-        return Movie.durationFormatter.string(from: TimeInterval(runtime) * 60) ?? "n/a"
+        return Movie.durationFormatter.string(from: TimeInterval(runtime) * 60) ?? "N/A"
+    }
+    
+    var releaseDateText: String {
+        guard let releaseDate = self.releaseDate, let date = Utils.dateFormatter.date(from: releaseDate) else {
+            return "N/A"
+        }
+        return Movie.dateFormatter.string(from: date)
     }
     
     var cast: [MovieCast]? {

@@ -1,6 +1,6 @@
 //
 //  TabsView.swift
-//  SmartWaste
+//  YeMovies
 //
 //  Created by Yegor Myropoltsev on 27.11.2023.
 //
@@ -14,50 +14,32 @@ struct TabsView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
-                HeaderView("♻️ SmartWaste")
                 TabView(
                     selection: viewStore.binding(
                         get: \.selectedTab,
                         send: TabsFeature.Action.tabSelected
                     )
                 ) {
-                    MapCoordinatorView(
+                    DiscoverCoordinatorView(
                         store: self.store.scope(
-                            state: \.map,
-                            action: \.map
+                            state: \.discover,
+                            action: \.discover
                         )
                     )
-                    .tabItem { Label("Map", systemImage: "map.fill") }
-                    .tag(Tab.map)
+                    .tabItem { Label("Discover", systemImage: "house.fill") }
+                    .tag(Tab.discover)
 
-                    ProfileCoordinatorView(
+                    SearchCoordinatorView(
                         store: self.store.scope(
-                            state: \.profile,
-                            action: \.profile
+                            state: \.search,
+                            action: \.search
                         )
                     )
-                    .tabItem { Label("Profile", systemImage: "person.fill") }
-                    .tag(Tab.profile)
+                    .tabItem { Label("Search", systemImage: "magnifyingglass") }
+                    .tag(Tab.search)
 
-                    BucketCoordinatorView(
-                        store: self.store.scope(
-                            state: \.bucket,
-                            action: \.bucket
-                        )
-                    )
-                    .tabItem { Label("Bucket", systemImage: "trash.fill") }
-                    .tag(Tab.bucket)
                 }
-                .accentColor(.green)
-            }
-            .alert(
-                store: self.store.scope(
-                    state: \.$alert,
-                    action: \.alert
-                )
-            )
-            .onAppear {
-                viewStore.send(.onAppear)
+                .accentColor(.yellow)
             }
         }
     }
@@ -66,7 +48,7 @@ struct TabsView: View {
 struct TabsView_Previews: PreviewProvider {
     static var previews: some View {
         TabsView(
-            store: Store(initialState: .initState(from: .map)) {
+            store: Store(initialState: .initState(from: .discover)) {
                 TabsFeature()
                     ._printChanges()
             }

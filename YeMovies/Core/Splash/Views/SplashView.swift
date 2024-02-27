@@ -1,6 +1,6 @@
 //
 //  SplashView.swift
-//  SmartWaste
+//  YeMovies
 //
 //  Created by Yegor Myropoltsev on 24.11.2023.
 //
@@ -14,14 +14,9 @@ struct SplashView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            Text("♻️ SmartWaste")
+            Text("💫 YeMovies")
                 .font(.system(size: 40))
                 .bold()
-                .transition(
-                    .offset(y: -(Constants.screen.height))
-                    .combined(with: .scale(scale: 0.5))
-                    .combined(with: .opacity)
-                )
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                         viewStore.send(.appDidLaunch, animation: .default)
@@ -35,7 +30,7 @@ struct SplashView: View {
 struct SplashView_Previews: PreviewProvider {
     static var previews: some View {
         SplashView(
-            store: Store(initialState: .initialState) {
+            store: Store(initialState: .init()) {
                 SplashFeature()
             }
         )

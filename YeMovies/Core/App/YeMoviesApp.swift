@@ -10,9 +10,20 @@ import SwiftUI
 
 @main
 struct YeMoviesApp: App {
+    let store: StoreOf<RootCoordinator>
+    
+    init() {
+        self.store = Store(initialState: .initialState) {
+            RootCoordinator()
+                ._printChanges()
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootCoordinatorView(
+                store: self.store
+            )
         }
     }
 }
